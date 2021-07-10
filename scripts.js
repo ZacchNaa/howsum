@@ -28,6 +28,29 @@ const howSum = (targetSum, numbers) => {
   return null;
 };
 
+// high performance
+const howSumMemo = (targetSum, numbers, memo = {}) => {
+  if (targetSum in memo) return memo[targetSum];
+  if (targetSum === 0) return [];
+  if (targetSum < 0) return null;
+
+  for (const num of numbers) {
+    const remainder = targetSum - num;
+    const remainderResult = howSumMemo(remainder, numbers, memo);
+    if (remainderResult !== null) {
+      memo[targetSum] = [...remainderResult, num];
+      return memo[targetSum];
+    }
+  }
+
+  memo[targetSum] = null;
+  return null;
+};
+
 console.log(howSum(7, [3, 2]));
 console.log(howSum(7, [8, 9]));
 console.log(howSum(7, [2, 4]));
+
+console.log(howSumMemo(7, [3, 2]));
+console.log(howSumMemo(7, [8, 9]));
+console.log(howSumMemo(700, [2, 4]));
